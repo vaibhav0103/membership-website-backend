@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     #apps
     'users',
+    'api',
+    'courses',
+    'membership',
 
 ]
 
@@ -138,9 +141,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # )
 }
 
 CORS_ALLOWED_ORIGINS = [
