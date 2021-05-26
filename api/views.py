@@ -13,9 +13,9 @@ def course_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def course_detail(request, pk):
+def course_detail(request, slug):
     try:
-        course = Course.objects.get(pk=pk)
+        course = Course.objects.get(slug=slug)
     except Course.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = CourseSerializer(course)
