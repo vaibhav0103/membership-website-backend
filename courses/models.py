@@ -14,7 +14,7 @@ class Course(models.Model):
     slug = models.SlugField(unique=True)
     thumbnail = models.ImageField(upload_to="thumbnails/")
     description = models.TextField()
-    pricing_tiers = models.ManyToManyField(Pricing, blank=True)
+    pricing_tier = models.ForeignKey(Pricing, on_delete=models.PROTECT, related_name="pricing_tier")
     categories= models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
 

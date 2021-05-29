@@ -18,12 +18,13 @@ class CourseSerializer(serializers.ModelSerializer):
         slug_field='name',
         # queryset= Category.objects.all()
     )
-    pricing_tiers = serializers.SlugRelatedField(
-        many=True,
+    pricing_tier = serializers.SlugRelatedField(
+        # many=True,
         read_only=True,
         slug_field='name',
         # queryset= Pricing.objects.all()
     )
+    # pricing_tier = serializers.PrimaryKeyRelatedField(queryset=Pricing.objects.all(), many=False) 
     lesson = LessonSerializer(many=True, read_only=True)
 
     class Meta:
