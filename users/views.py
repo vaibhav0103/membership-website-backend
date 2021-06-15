@@ -1,10 +1,11 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth.models import User
-from users.serializers import RegisterSerializer
+from users.serializers import RegisterSerializer, UserSerializer, ProfileSerializer
 
 
 @api_view(['POST'])
@@ -38,11 +39,15 @@ def logout_by_blacklist(request):
 
 
 @api_view(['GET'])
-def check_user(request):
-    user_authenticated = False
+@permission_classes([IsAuthenticated])
+def user_details(request):    
     if request.user.is_authenticated:
-        user_authenticated = True
-        data= { 'is_authenticated': user_authenticated, 'user_id': request.user.id}
-        return Response(data, status=status.HTTP_200_OK)
-    data= { 'is_authenticated': user_authenticated}
-    return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+# class ProfileAPI(APIView):
+#     def get(self, request, *args, **kwargs):
+#         user = get_object_or_404(User, pk=kwargs['user_id'])
+#         profile_serializer = ProfileSerializer(user.profile)
+#         return Response(profile_serializer.data)
