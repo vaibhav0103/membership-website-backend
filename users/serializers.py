@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from .models import Profile
+from membership.models import Membership
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -39,11 +40,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
 
+class MembershipSerializer(serializers.ModelSerializer):
+    pricing = serializers.SlugRelatedField(slug_field='name', read_only=True)
+    class Meta:
+        model = Membership
+        fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    membership = MembershipSerializer()
     class Meta:
         model = User
-        fields = ('username', 'email', 'profile' )
+        fields = ('username', 'email', 'profile', 'membership' )
 
 

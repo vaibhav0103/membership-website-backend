@@ -15,7 +15,7 @@ class Pricing(models.Model):
 
 class Membership(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    pricing = models.ForeignKey(Pricing, on_delete=models.CASCADE, related_name='memberships')
+    pricing = models.ForeignKey(Pricing, on_delete=models.SET_NULL, null=True, related_name='memberships')
     created = models.DateTimeField(auto_now_add=True)
     stripe_subscription_id = models.CharField(max_length=50)
     status = models.CharField(max_length=100)
