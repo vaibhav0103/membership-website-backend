@@ -4,6 +4,7 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from membership.models import Pricing
 
+
 class Category(models.Model):
     name= models.CharField(max_length=30)
     desc = models.CharField(max_length=150)

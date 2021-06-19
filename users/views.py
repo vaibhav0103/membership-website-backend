@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth.models import User
 from users.serializers import RegisterSerializer, UserSerializer, ProfileSerializer
+from courses.models import Course
 
 
 @api_view(['POST'])
@@ -46,8 +47,26 @@ def user_details(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-# class ProfileAPI(APIView):
+# class ProfileAPI(APIView):    
 #     def get(self, request, *args, **kwargs):
 #         user = get_object_or_404(User, pk=kwargs['user_id'])
 #         profile_serializer = ProfileSerializer(user.profile)
 #         return Response(profile_serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def enroll_user(request, *args, **kwargs):
+    if request.method == 'POST':
+        
+        if request.user.is_authenticated:
+            course_id = request.data.get('course_id')
+            course = Course.objects.get(pk=course_id)
+            current_user = request.user            
+            if current_user.membership.pricing == course.pricing_tier or current_user.membership.pricing.price >= course.pricing_tier.price:
+                print("Yes")
+                # current_user.profile.enrolled_courses.add(mycourse)
+                return Response(data="You have succesfully enrolled in course",status=status.HTTP_200_OK)
+            return Response(data="You need to upgrade membership to access this course", status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response(status=status.HTTP_401_UNAUTHORIZED)
